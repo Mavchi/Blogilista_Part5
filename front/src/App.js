@@ -4,7 +4,20 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginServices from './services/login'
 
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className={message.type}>
+      {message.txt}
+    </div>
+  )
+}
+
 const App = () => {
+  const [errorMessage, setErrorMessage] = useState(null)
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
@@ -43,7 +56,10 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (error) {
-      console.log(error)
+      setErrorMessage({ type: 'error', txt: 'wrong username or password' })
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
     }
   }
 
@@ -65,8 +81,16 @@ const App = () => {
       setTitle('')
       setAuthor('')
       setUrl('')
+
+      setErrorMessage({ type: 'success', txt: `a new blog ${new_blog.name} by ${new_blog.author} added` })
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
     } catch(error) {
-      console.log(error)
+      setErrorMessage({ type: 'error', txt: error.message })
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
     }
   }
 
@@ -74,6 +98,7 @@ const App = () => {
     return (
       <div>
         <h2>log in to application</h2>
+        <Notification message={errorMessage}/>
         <form onSubmit={handleLogin}>
           <div>
             username
@@ -100,6 +125,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <Notification message={errorMessage}/>
       <p>{user.name} logged in <button onClick={logOut}>logout</button></p>
 
       <h2>create new</h2>
