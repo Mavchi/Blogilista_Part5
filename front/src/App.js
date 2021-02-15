@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
+
 import Blog from './components/Blog'
+import Toggable from './components/Togglable'
+import BlogForm from './components/BlogForm'
 
 import blogService from './services/blogs'
 import loginServices from './services/login'
@@ -23,9 +26,6 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -68,30 +68,33 @@ const App = () => {
     setUser(null)
   }
 
-  const handleAddBlog = async (event) => {
-    event.preventDefault()
-
+  const blogFormRef = useRef()
+  const addBlog = async ( blogObject ) => {
     try {
-      const new_blog = await blogService.create({
-        title, author, url
-      })
-      if(new_blog){
-        setBlogs(blogs.concat(new_blog))
-      }
-      setTitle('')
-      setAuthor('')
-      setUrl('')
+      blogFormRef.current.toggleVisibility()
 
-      setErrorMessage({ type: 'success', txt: `a new blog ${new_blog.name} by ${new_blog.author} added` })
+      const new_blog = await blogService.create(blogObject)
+      console.log(new_blog)
+      setBlogs(blogs.concat(new_blog))
+
+      setErrorMessage({ type: 'success', txt: `a new blog ${new_blog.title} by ${new_blog.author} added` })
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
     } catch(error) {
-      setErrorMessage({ type: 'error', txt: error.message })
+      setErrorMessage({ type: 'error', txt: "missing title, author or url" })
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
     }
+  }
+
+  const blogForm = () => {
+    return (
+      <Toggable buttonLabel='new blog' ref={blogFormRef}>
+        <BlogForm createBlog={addBlog} />
+      </Toggable>
+    )
   }
 
   if (user === null)
@@ -128,37 +131,7 @@ const App = () => {
       <Notification message={errorMessage}/>
       <p>{user.name} logged in <button onClick={logOut}>logout</button></p>
 
-      <h2>create new</h2>
-      <form onSubmit={handleAddBlog}>
-        <div>
-          title:
-          <input
-            type='text'
-            name='Title'
-            value={title}
-            onChange={(event) => setTitle(event.target.value)}
-          />
-        </div>
-        <div>
-          author:
-          <input
-            type='text'
-            name='Author'
-            value={author}
-            onChange={(event) => setAuthor(event.target.value)}
-          />
-        </div>
-        <div>
-          url:
-          <input
-            type='text'
-            name='Url'
-            value={url}
-            onChange={(event) => setUrl(event.target.value)}
-          />
-        </div>
-        <button type='submit'>create</button>
-      </form>
+      {blogForm()}
 
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
