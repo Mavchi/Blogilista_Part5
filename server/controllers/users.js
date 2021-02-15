@@ -24,5 +24,10 @@ usersRouter.post('/', async (request, response) => {
     const savedUser = await user.save()
     response.json(savedUser)
 })
-
+/*
+usersRouter.delete('/:id', async (request, response) => {
+    User.deleteMany({})
+    response.status(201).end()
+})
+*/
 module.exports = usersRouter

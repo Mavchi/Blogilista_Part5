@@ -52,6 +52,7 @@ blogsRouter.post('/', async (request, response) => {
 blogsRouter.delete('/:id', async (request, response) => {
     const token = request.token
     const decodedToken = jwt.verify(token, process.env.SECRET)
+    console.log(decodedToken)
     if( !token || !decodedToken.id ){
         return response.status(401).json({ error: 'token missing or invalid'})
     }
@@ -61,7 +62,7 @@ blogsRouter.delete('/:id', async (request, response) => {
 
     // trying to remove wrong user's blog
     if( blog.user._id.toString() !== user._id.toString() ){
-        return response.status(401).json({ error: 'trying to remove wront persons blog' })
+        return response.status(401).json({ error: 'trying to remove wrong persons blog' })
     }
 
     // remove from users blogs

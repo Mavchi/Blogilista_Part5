@@ -104,6 +104,19 @@ const App = () => {
     }
   }
 
+  const handleRemoveBlog = ( blog ) => {
+    return async () => {
+      try {
+        if(window.confirm(`Remove blog ${blog.title} by ${blog.author}`)){
+          await blogService.remove(blog.id)
+          setBlogs(blogs.filter(b => b.id!==blog.id))
+        }
+      } catch(error){
+        console.log(error.message)
+      }
+    }
+  }
+
   if (user === null)
     return (
       <div>
@@ -151,7 +164,7 @@ const App = () => {
       {blogForm()}
 
       {sorted_blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} handleLike={handleBlogLike}/>
+        <Blog key={blog.id} blog={blog} user={user} handleLike={handleBlogLike} handleRemoveBlog={handleRemoveBlog}/>
       )}
     </div>
   )
