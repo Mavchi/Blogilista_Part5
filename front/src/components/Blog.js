@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-const Blog = ({ 
-    blog, 
-    user, 
-    handleLike,
-    handleRemoveBlog,
-  }) => {
+const Blog = ({
+  blog,
+  user,
+  handleLike,
+  handleRemoveBlog,
+}) => {
   const [visible, setVisible] = useState(false)
 
   const blogStyle = {
@@ -29,11 +29,11 @@ const Blog = ({
         {blog.likes} <button onClick={handleLike(blog)}>like</button> <br/>
         {blog.author} <br />
         {(blog.user.username===user.username && blog.user.name===user.name)
-            && <button onClick={handleRemoveBlog(blog)}>remove</button>  
+            && <button onClick={handleRemoveBlog(blog)}>remove</button>
         }
       </div>
     )
-  
+
   return (
     <div style={blogStyle}>
       {blog.title} <button onClick={toggleVisibility}>show</button><br />

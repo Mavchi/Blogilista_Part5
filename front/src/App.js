@@ -82,7 +82,7 @@ const App = () => {
         setErrorMessage(null)
       }, 5000)
     } catch(error) {
-      setErrorMessage({ type: 'error', txt: "missing title, author or url" })
+      setErrorMessage({ type: 'error', txt: 'missing title, author or url' })
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
@@ -99,7 +99,7 @@ const App = () => {
 
   const handleBlogLike = ( blog ) => {
     return async () => {
-      const newBlog = await blogService.update({...blog, likes: blog.likes+1})
+      const newBlog = await blogService.update({ ...blog, likes: blog.likes+1 })
       setBlogs(blogs.map(blog => blog.id===newBlog.id ? newBlog : blog))
     }
   }
@@ -125,7 +125,7 @@ const App = () => {
         <form onSubmit={handleLogin}>
           <div>
             username
-        <input
+            <input
               type='text'
               value={username}
               name='Username'
@@ -133,7 +133,7 @@ const App = () => {
             />
           </div><div>
             password
-        <input
+            <input
               type='password'
               value={password}
               name='Password'
