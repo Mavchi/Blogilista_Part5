@@ -23,7 +23,7 @@ const Blog = ({
 
   if (visible)
     return (
-      <div style={blogStyle}>
+      <div clasName='blogDiv' style={blogStyle}>
         {blog.title} <button onClick={toggleVisibility}>hide</button><br />
         {blog.url} <br />
         {blog.likes} <button onClick={handleLike(blog)}>like</button> <br/>
@@ -35,8 +35,8 @@ const Blog = ({
     )
 
   return (
-    <div style={blogStyle}>
-      {blog.title} <button onClick={toggleVisibility}>show</button><br />
+    <div clasName='blogDiv' style={blogStyle}>
+      {blog.title} by {blog.author}<button onClick={toggleVisibility}>show</button><br />
     </div>
   )
 }
