@@ -68,10 +68,42 @@ describe('<Blog />', () => {
         fireEvent.click(button)
 
         const div = component.container.querySelector('.blogDiv')
-        console.log(prettyDOM(div))
+        //console.log(prettyDOM(div))
 
 
         expect(div).toHaveTextContent(blog.url)
         expect(div).toHaveTextContent(blog.likes)
     })
+})
+
+test('if like-pressed twice, event handler is called twice', async () => {
+    const blog = {
+        title: 'React patterns',
+        author: 'Michael Chan',
+        url: 'https://reactpatterns.com/',
+        likes: 7,
+        id: '60195104d30c6f53fb2afd6a',
+        user: {
+            username: 'root',
+            name: 'Aleksi,'
+        }
+    }
+    const user = {
+      token: '123',
+      username: 'root',
+      name: 'Aleksi,'
+    }
+    const mockHandler1 = jest.fn()
+    const mockHandler2 = jest.fn()
+    const component = render(
+        <Blog blog={blog} user={user} handleLike={mockHandler1} handleRemoveBlog={mockHandler2} />
+    )
+
+    const show_button = component.getByText('show')
+    fireEvent.click(show_button)
+
+    const button = component.getByText('like')
+    fireEvent.click(button)
+    fireEvent.click(button)
+    expect(mockHandler1).toHaveBeenCalledTimes(2)
 })

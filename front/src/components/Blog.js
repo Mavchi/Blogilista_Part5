@@ -35,7 +35,7 @@ const Blog = ({
     )
 
   return (
-    <div clasName='blogDiv' style={blogStyle}>
+    <div className='blogDiv' style={blogStyle}>
       {blog.title} by {blog.author}<button onClick={toggleVisibility}>show</button><br />
     </div>
   )
