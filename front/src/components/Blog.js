@@ -23,7 +23,7 @@ const Blog = ({
 
   if (visible)
     return (
-      <div clasName='blogDiv' style={blogStyle}>
+      <div className='blogDiv' style={blogStyle}>
         {blog.title} <button onClick={toggleVisibility}>hide</button><br />
         {blog.url} <br />
         {blog.likes} <button onClick={handleLike(blog)}>like</button> <br/>
