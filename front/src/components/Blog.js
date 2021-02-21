@@ -26,7 +26,7 @@ const Blog = ({
       <div className='blogDiv' style={blogStyle}>
         {blog.title} <button onClick={toggleVisibility}>hide</button><br />
         {blog.url} <br />
-        <span className='blog-likes'>{blog.likes}</span> <button onClick={handleLike(blog)}>like</button> <br/>
+        <span className='blog-likes'>{blog.likes}</span> <button className='blog-like-button' onClick={handleLike(blog)}>like</button> <br/>
         {blog.author} <br />
         {(blog.user.username===user.username && blog.user.name===user.name)
             && <button onClick={handleRemoveBlog(blog)}>remove</button>
@@ -36,7 +36,7 @@ const Blog = ({
 
   return (
     <div className='blogDiv' style={blogStyle}>
-      {blog.title} by {blog.author}<button onClick={toggleVisibility}>show</button><br />
+      {blog.title} by {blog.author}<button className='blog-show-button' onClick={toggleVisibility}>show</button><br />
     </div>
   )
 }

@@ -90,7 +90,7 @@ describe('Blog app', function() {
           .should('contain', 'Edsger W. Dijkstra')
       })
 
-      describe('Blogs', function() {
+      describe('Blog', function() {
         beforeEach(function() {
           cy.createBlog({
               title: 'Go To Statement Considered Harmful',
@@ -112,6 +112,32 @@ describe('Blog app', function() {
           cy.get('.content-blogs')
             .should('not.contain', 'Go To Statement Considered Harmful')
             .should('not.contain', 'Edsger W. Dijkstra')
+        })
+      })
+
+      describe('Multiple blogs', function() {
+        beforeEach(function() {
+          cy.createBlog({
+              title: 'Go To Statement Considered Harmful',
+              author: 'Edsger W. Dijkstra',
+              url: 'https://reactpatterns.com/',
+          })
+          cy.createBlog({
+              title: 'React patterns',
+              author: 'Michael Chan',
+              url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+          })
+        })
+
+        it('blogs are sorted correctly according to likes', function() {
+          cy.get('.blogDiv').then(blogs => {
+            cy.wrap(blogs[0]).contains('show').click()
+            cy.wrap(blogs[1]).contains('show').click()
+
+            cy.wrap(blogs[0]).should('contain', 'Go To Statement Considered Harmful')
+            cy.wrap(blogs[1]).contains('like').click()
+          })
+          cy.get('.blogDiv').should('contain', 'React patterns')
         })
       })
   })
