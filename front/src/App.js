@@ -165,9 +165,11 @@ const App = () => {
 
       {blogForm()}
 
-      {sorted_blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} user={user} handleLike={handleBlogLike} handleRemoveBlog={handleRemoveBlog}/>
-      )}
+      <div className="content-blogs">
+        {sorted_blogs.map(blog =>
+          <Blog key={blog.id} blog={blog} user={user} handleLike={handleBlogLike} handleRemoveBlog={handleRemoveBlog}/>
+        )}
+      </div>
     </div>
   )
 }

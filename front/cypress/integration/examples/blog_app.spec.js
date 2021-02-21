@@ -7,6 +7,19 @@ Cypress.Commands.add('login', ({ username, password }) => {
     })
 })
 
+Cypress.Commands.add('createBlog', ({ title, author, url }) => {
+  cy.request({
+    url: 'http://localhost:3001/api/blogs',
+    method: 'POST',
+    body: { title, author, url },
+    headers: {
+        'Authorization': `bearer ${JSON.parse(localStorage.getItem('loggedBlogsPart5User')).token}`
+    }
+  })
+
+  cy.visit('http://localhost:3000')
+})
+
 describe('Blog app', function() {
   beforeEach(function() {
     cy.request('POST', 'http://localhost:3001/api/testing/reset')
@@ -47,5 +60,34 @@ describe('Blog app', function() {
         .should('contain', 'wrong username or password')
         .should('have.css', 'color', 'rgb(255, 0, 0)')
     })
+  })
+
+  describe('When logged in', function() {
+      beforeEach(function() {
+        cy.request('POST', 'http://localhost:3001/api/testing/reset')
+        const user = {
+          name: 'Aleksi K',
+          username: 'root',
+          password: 'sekret'
+        }
+
+        cy.request('POST', 'http://localhost:3001/api/users/', user)
+        cy.visit('http://localhost:3000/')
+
+        cy.login({ username: 'root', password: 'sekret' })
+      })
+
+      it('A blog can be created', function() {
+        cy.contains('create new blog').click()
+        cy.get('#title').type('Go To Statement Considered Harmful')
+        cy.get('#author').type('Edsger W. Dijkstra')
+        cy.get('#url').type('http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html')
+        
+        cy.get('#create-blog-button').click()
+        cy.contains('a new blog Go To Statement Considered Harmful by Edsger W. Dijkstra added')
+        cy.get('.content-blogs')
+          .should('contain', 'Go To Statement Considered Harmful')
+          .should('contain', 'Edsger W. Dijkstra')
+      })
   })
 })
