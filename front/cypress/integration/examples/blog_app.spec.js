@@ -89,5 +89,30 @@ describe('Blog app', function() {
           .should('contain', 'Go To Statement Considered Harmful')
           .should('contain', 'Edsger W. Dijkstra')
       })
+
+      describe('Blogs', function() {
+        beforeEach(function() {
+          cy.createBlog({
+              title: 'Go To Statement Considered Harmful',
+              author: 'Edsger W. Dijkstra',
+              url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+          })
+        })
+
+        it('possible to like blog', function () {
+          cy.contains('show').click()
+          cy.get('.blog-likes').should('contain', '0')
+          cy.contains('like').click()
+          cy.get('.blog-likes').should('contain', '1')
+        })
+
+        it('user can remove blog', function () {
+          cy.contains('show').click()
+          cy.contains('remove').click()
+          cy.get('.content-blogs')
+            .should('not.contain', 'Go To Statement Considered Harmful')
+            .should('not.contain', 'Edsger W. Dijkstra')
+        })
+      })
   })
 })
