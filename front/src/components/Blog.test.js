@@ -90,20 +90,22 @@ test('if like-pressed twice, event handler is called twice', async () => {
     }
     const user = {
       token: '123',
-      username: 'root',
+      username: 'fail',
       name: 'Aleksi,'
     }
-    const mockHandler1 = jest.fn()
-    const mockHandler2 = jest.fn()
+    const mockHandler = jest.fn()
     const component = render(
-        <Blog blog={blog} user={user} handleLike={mockHandler1} handleRemoveBlog={mockHandler2} />
+        <Blog blog={blog} user={user} handleLike={mockHandler} handleRemoveBlog={() => console.log('fail')} />
     )
 
     const show_button = component.getByText('show')
     fireEvent.click(show_button)
 
     const button = component.getByText('like')
+    //console.log(prettyDOM(button))
     fireEvent.click(button)
     fireEvent.click(button)
-    expect(mockHandler1).toHaveBeenCalledTimes(2)
+    //expect(mockHandler1).toHaveBeenCalledTimes(2)
+    expect(mockHandler).toHaveBeenCalledTimes(2)
+    //expect(mockHandler1.mock.calls.length).toBe(2)
 })
